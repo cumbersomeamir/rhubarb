@@ -54,17 +54,30 @@ def rhubarb_convert():
     if not url:
         return jsonify({'error': 'URL is required'}), 400
 
-    # Download the file
-    if download_file(url, 'output.ogg'):
-        # Generate lip-sync data
-        lip_sync_data = generate_lip_sync_data('output.ogg')
-        
-        if lip_sync_data:
-            return jsonify({'data': lip_sync_data}), 200
-        else:
-            return jsonify({'error': 'Failed to generate lip-sync data'}), 500
-    else:
-        return jsonify({'error': 'Failed to download file'}), 500
+    try:
+        # Download the file
+        if download_file(url, 'output.ogg'):
+            # Generate lip-sync data
+            lip_sync_data = generate_lip_sync_data('output.ogg')
+            
+            # Delete the files after generating lip-sync data
+            if os.path.exists('output.ogg'):
+                os.remove('output.ogg')
+            if os.path.exists('output.json'):
+                os.remove('output.json')
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+            if lip_sync_data:
+                return jsonify({'data': lip_sync_data}), 200
+            else:
+                return jsonify({'error': 'Failed to generate lip-sync data'}), 500
+        else:
+            return jsonify({'error': 'Failed to download file'}), 500
+
+    except Exception as e:
+        # Ensure files are deleted even if there's an exception
+        if os.path.exists('output.ogg'):
+            os.remove('output.ogg')
+        if os.path.exists('output.json'):
+            os.remove('output.json')
+        return jsonify({'error': str(e)}), 500
+
