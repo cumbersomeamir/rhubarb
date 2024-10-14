@@ -19,10 +19,10 @@ def download_file(url, output_file):
 def generate_lip_sync_data(audio_file_name):
     print(f"Generating lip-sync data for audio file: {audio_file_name}")
     
-    working_directory = '/home/amir/pod/rhubarb/lib/python3.11/site-packages'
+    working_directory = '/home/amir/pod/rhubarb_dir/lib/python3.11/site-packages'
     output_file = 'output.json'
     
-    command = f'/home/amir/pod/rhubarb/lib/python3.11/site-packages/Rhubarb-Lip-Sync-1.13.0-Linux/rhubarb -f json "{audio_file_name}" -o "{output_file}"'
+    command = f'/home/amir/pod/rhubarb_dir/lib/python3.11/site-packages/Rhubarb-Lip-Sync-1.13.0-Linux/rhubarb -f json "{audio_file_name}" -o "{output_file}"'
 
     print(f"Executing command: {command}")
 
